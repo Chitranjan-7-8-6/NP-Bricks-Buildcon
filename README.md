@@ -1,6 +1,6 @@
 # NP-Bricks-Architect
 
-![NP Bricks Buildcon](assets/banner.svg)
+
 
 <img width="300" height="80" alt="banner" src="https://github.com/user-attachments/assets/8005939d-7d80-43b4-90db-e958662a45c6" />
 <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
@@ -76,7 +76,7 @@ No npm install, no build command, no server needed.
 
 ## 🗺️ Page Structure
 
-![Site Map](assets/sitemap.svg)
+
 
 
 <img width="290" height="150" alt="sitemap" src="https://github.com/user-attachments/assets/4bf7d37c-1ce7-46a2-a2de-e15531601175" />
@@ -159,7 +159,7 @@ No npm install, no build command, no server needed.
 
 ## 🎨 Color System
 
-![Color Palette](assets/palette.svg)
+
 
 <img width="300" height="65" alt="palette" src="https://github.com/user-attachments/assets/6f8efab5-bb19-4e8b-8936-27f69365cba5" />
 
@@ -222,7 +222,7 @@ No npm install, no build command, no server needed.
 
 ## 📝 Quote Form Flow
 
-![Quote Form Flow](assets/formflow.svg)
+
 
 
 <img width="300" height="65" alt="formflow" src="https://github.com/user-attachments/assets/8a201f20-d11d-4070-a788-cf1ca2920c08" />
