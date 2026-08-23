@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NP Bricks Buildcon — We Build Your Dream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Cormorant+Garamond:ital@1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal-950:#0B0B0D;
+    --charcoal-900:#141416;
+    --charcoal-800:#1E1E22;
+    --gold-500:#C9A24B;
+    --gold-300:#E7CE8C;
+    --amber-500:#E08A2C;
+    --offwhite-100:#F5F3EF;
+    --stone-400:#A8A6A1;
+    --emerald-500:#4CAF7D;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%;}
+  body{
+    background:var(--charcoal-950);
+    color:var(--offwhite-100);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    width:100%;
+  }
+  section, nav, footer{width:100%;}
+  img, video{max-width:100%; height:auto;}
+  iframe{max-width:100%;}
+  h1,h2,h3,.display{font-family:'Sora',sans-serif; font-weight:800;}
+  .script{font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--gold-300);}
+  a{text-decoration:none; color:inherit;}
+  img{max-width:100%; display:block;}
+  .container{max-width:1200px; margin:0 auto; padding:0 24px;}
+  @media(max-width:480px){ .container{padding:0 18px;} }
+
+  /* Blueprint texture */
+  .blueprint-bg{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(201,162,75,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,162,75,0.06) 1px, transparent 1px);
+    background-size:40px 40px;
+    opacity:0.5;
+    pointer-events:none;
+  }
+
+  /* NAV */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 32px;
+    transition:background .35s ease, backdrop-filter .35s ease, box-shadow .35s ease;
+    gap:12px;
+  }
+  @media(max-width:480px){
+    nav{padding:12px 16px;}
+    .logo-mark .np{font-size:17px;}
+    .logo-sub{font-size:8.5px; letter-spacing:1.5px;}
+  }
+  nav.scrolled{
+    background:rgba(11,11,13,0.85);
+    backdrop-filter:blur(10px);
+    box-shadow:0 1px 0 rgba(201,162,75,0.15);
+  }
+  .logo-mark{display:flex; align-items:center; gap:10px;}
+  .logo-mark .np{
+    font-family:'Sora',sans-serif; font-weight:800; font-size:22px; letter-spacing:1px;
+    color:var(--offwhite-100);
+  }
+  .logo-mark .np span{color:var(--gold-500);}
+  .logo-sub{font-size:10px; letter-spacing:2px; color:var(--stone-400); text-transform:uppercase; margin-top:-2px;}
+  .nav-links{display:flex; gap:32px; font-size:14px; font-weight:500;}
+  .nav-links a{position:relative; padding-bottom:4px; color:var(--offwhite-100);}
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--gold-500); transition:width .3s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-actions{display:flex; gap:12px; align-items:center;}
+  .icon-btn{
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--gold-500); display:flex; align-items:center; justify-content:center;
+    color:var(--gold-500); transition:all .25s ease;
+  }
+  .icon-btn:hover{background:var(--gold-500); color:var(--charcoal-950);}
+  .nav-toggle{display:none; background:none; border:none; color:var(--offwhite-100); font-size:26px; cursor:pointer; line-height:1;}
+  @media(max-width:900px){
+    .nav-links{
+      position:fixed; top:0; right:-100%; height:100vh; width:78%; max-width:320px;
+      background:var(--charcoal-900); flex-direction:column; padding:100px 32px; gap:26px;
+      transition:right .4s ease; box-shadow:-10px 0 30px rgba(0,0,0,0.5);
+      z-index:101; overflow-y:auto;
+    }
+    .nav-links.open{right:0;}
+    .nav-toggle{display:block;}
+  }
+  @media(max-width:400px){
+    .icon-btn{width:34px; height:34px; font-size:14px;}
+    .nav-actions{gap:8px;}
+    .nav-toggle{font-size:22px;}
+  }
+
+  /* Buttons */
+  .btn-primary{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    background:linear-gradient(120deg, var(--gold-500), var(--amber-500));
+    color:var(--charcoal-950); font-weight:700; padding:14px 30px; border-radius:8px;
+    border:none; cursor:pointer; font-size:15px;
+    box-shadow:0 0 0 rgba(201,162,75,0);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .btn-primary:hover{transform:scale(1.03); box-shadow:0 8px 30px rgba(201,162,75,0.35);}
+  .btn-secondary{
+    display:inline-flex; align-items:center; justify-content:center;
+    background:transparent; border:1px solid var(--gold-500); color:var(--gold-300);
+    padding:13px 28px; border-radius:8px; font-weight:600; font-size:15px; cursor:pointer;
+    transition:background .25s ease, color .25s ease;
+  }
+  .btn-secondary:hover{background:var(--gold-500); color:var(--charcoal-950);}
+
+  /* HERO */
+  .hero{
+    position:relative; min-height:100vh; min-height:100dvh; display:flex; align-items:center;
+    padding:140px 0 80px;
+    background:
+      linear-gradient(180deg, rgba(11,11,13,0.55) 0%, rgba(11,11,13,0.85) 60%, var(--charcoal-950) 100%),
+      url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1600&q=80') center/cover;
+    background-attachment:scroll;
+  }
+  .hero-inner{position:relative; z-index:2; max-width:720px; width:100%;}
+  @media(max-width:600px){
+    .hero{padding:120px 0 60px; min-height:auto;}
+    .hero-ctas{flex-direction:column; align-items:stretch;}
+    .hero-ctas .btn-primary, .hero-ctas .btn-secondary{width:100%;}
+  }
+  .eyebrow{
+    color:var(--gold-300); font-size:13px; letter-spacing:3px; text-transform:uppercase;
+    margin-bottom:18px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:30px; height:1px; background:var(--gold-500);}
+  .hero h1{font-size:clamp(38px,6vw,64px); line-height:1.05; letter-spacing:-1px; margin-bottom:14px;}
+  .hero .script-line{font-size:clamp(30px,4vw,44px); display:block; margin-bottom:10px;}
+  .hero p.sub{color:var(--stone-400); font-size:17px; max-width:520px; margin-bottom:34px; line-height:1.6;}
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:46px;}
+  .trust-strip{display:flex; gap:28px; flex-wrap:wrap; font-size:13px; color:var(--stone-400);}
+  .trust-strip span{color:var(--gold-500); font-weight:700;}
+  .trust-strip .dot{width:4px; height:4px; border-radius:50%; background:var(--gold-500); align-self:center;}
+  .trust-strip-row{display:flex; align-items:center; gap:8px;}
+
+  /* Section generic */
+  section{position:relative; padding:100px 0;}
+  .section-alt{background:var(--charcoal-900);}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head .eyebrow{margin-bottom:14px;}
+  .section-head h2{font-size:clamp(28px,4vw,42px); line-height:1.15; margin-bottom:14px;}
+  .section-head p{color:var(--stone-400); font-size:16px; line-height:1.6;}
+  @media(max-width:600px){
+    section{padding:64px 0;}
+    .section-head{margin-bottom:36px;}
+  }
+
+  /* About founder */
+  .about-grid{display:grid; grid-template-columns:0.8fr 1.2fr; gap:56px; align-items:center;}
+  .founder-frame{
+    position:relative; border-radius:16px; overflow:hidden;
+    border:1px solid var(--gold-500); box-shadow:0 0 40px rgba(201,162,75,0.12);
+  }
+  .founder-frame img{filter:grayscale(15%) contrast(1.05);}
+  .about-copy h3{font-size:26px; margin-bottom:16px;}
+  .about-copy p{color:var(--stone-400); line-height:1.75; margin-bottom:16px; font-size:15.5px;}
+  .credentials{display:flex; gap:30px; margin-top:28px; flex-wrap:wrap;}
+  .credential{border-left:2px solid var(--gold-500); padding-left:14px;}
+  .credential .num{font-family:'Sora',sans-serif; font-weight:700; font-size:26px; color:var(--gold-500);}
+  .credential .label{font-size:12px; color:var(--stone-400); text-transform:uppercase; letter-spacing:1px;}
+  @media(max-width:800px){.about-grid{grid-template-columns:1fr; gap:36px;}}
+  @media(max-width:480px){
+    .credentials{gap:20px;}
+    .credential .num{font-size:22px;}
+  }
+
+  /* Services */
+  .services-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:24px;}
+  @media(max-width:1000px){.services-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.services-grid{grid-template-columns:1fr;}}
+  .service-card{
+    background:var(--charcoal-800); border:1px solid rgba(201,162,75,0.15); border-radius:14px;
+    padding:32px 24px; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    cursor:default;
+  }
+  .service-card:hover{
+    transform:translateY(-6px); border-color:var(--gold-500);
+    box-shadow:0 16px 40px rgba(0,0,0,0.4);
+  }
+  .service-icon{
+    width:52px; height:52px; border-radius:12px; background:rgba(201,162,75,0.12);
+    display:flex; align-items:center; justify-content:center; margin-bottom:22px;
+    color:var(--gold-500); font-size:24px;
+  }
+  .service-card h4{font-size:18px; margin-bottom:10px; font-weight:700;}
+  .service-card p{font-size:14px; color:var(--stone-400); line-height:1.6;}
+
+  /* Process timeline */
+  .timeline{display:flex; justify-content:space-between; position:relative; margin-top:20px;}
+  .timeline::before{
+    content:''; position:absolute; top:24px; left:0; right:0; height:1px;
+    background:repeating-linear-gradient(90deg, var(--gold-500) 0 8px, transparent 8px 16px);
+  }
+  .timeline-step{flex:1; text-align:center; position:relative; padding:0 12px;}
+  .timeline-dot{
+    width:48px; height:48px; border-radius:50%; background:var(--charcoal-950);
+    border:2px solid var(--gold-500); display:flex; align-items:center; justify-content:center;
+    margin:0 auto 20px; font-family:'Sora',sans-serif; font-weight:700; color:var(--gold-500);
+    position:relative; z-index:2;
+  }
+  .timeline-step h4{font-size:15px; margin-bottom:8px;}
+  .timeline-step p{font-size:13px; color:var(--stone-400);}
+  @media(max-width:700px){
+    .timeline{flex-direction:column; gap:32px;}
+    .timeline::before{display:none;}
+  }
+
+  /* Portfolio */
+  .filter-tabs{display:flex; gap:12px; margin-bottom:32px; flex-wrap:wrap;}
+  .filter-tab{
+    padding:9px 20px; border-radius:24px; border:1px solid rgba(201,162,75,0.3);
+    font-size:13px; cursor:pointer; color:var(--stone-400); transition:all .25s ease;
+  }
+  .filter-tab.active, .filter-tab:hover{background:var(--gold-500); color:var(--charcoal-950); border-color:var(--gold-500);}
+  .gallery-grid{
+    columns:3 220px; column-gap:18px;
+  }
+  @media(max-width:900px){.gallery-grid{columns:2 180px;}}
+  @media(max-width:560px){.gallery-grid{columns:1; column-gap:0;}}
+  .gallery-item{
+    break-inside:avoid; margin-bottom:18px; position:relative; border-radius:10px; overflow:hidden;
+    border:1px solid rgba(201,162,75,0.12);
+  }
+  .gallery-item img{width:100%; display:block; transition:transform .5s ease;}
+  .gallery-item:hover img{transform:scale(1.06);}
+  .gallery-tag{
+    position:absolute; bottom:12px; left:12px; background:rgba(11,11,13,0.75);
+    padding:5px 12px; border-radius:20px; font-size:11px; letter-spacing:1px; text-transform:uppercase;
+    color:var(--gold-300);
+  }
+
+  /* Query Form */
+  .form-panel{
+    background:var(--charcoal-800); border:1px solid var(--gold-500); border-radius:20px;
+    padding:48px; max-width:640px; width:100%; margin:0 auto; box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  @media(max-width:640px){
+    .form-panel{padding:32px 20px; border-radius:16px;}
+  }
+  @media(max-width:400px){
+    .form-panel{padding:26px 16px;}
+    .step-title{font-size:19px;}
+  }
+  .progress-bar{height:4px; background:rgba(201,162,75,0.15); border-radius:2px; margin-bottom:36px; overflow:hidden;}
+  .progress-fill{height:100%; width:33.33%; background:linear-gradient(90deg,var(--gold-500),var(--amber-500)); transition:width .4s ease;}
+  .step-label{font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--gold-300); margin-bottom:6px;}
+  .step-title{font-size:22px; margin-bottom:28px; font-weight:700;}
+  .form-group{margin-bottom:20px;}
+  .form-group label{display:block; font-size:13px; color:var(--stone-400); margin-bottom:8px;}
+  .form-group input, .form-group select, .form-group textarea{
+    width:100%; background:var(--charcoal-950); border:1px solid rgba(201,162,75,0.25);
+    border-radius:8px; padding:13px 14px; color:var(--offwhite-100); font-size:14px; font-family:inherit;
+    transition:border-color .25s ease, box-shadow .25s ease;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+    outline:none; border-color:var(--gold-500); box-shadow:0 0 0 3px rgba(201,162,75,0.15);
+  }
+  .checkbox-row{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--stone-400); margin-top:8px;}
+  .form-nav{display:flex; justify-content:space-between; margin-top:32px; gap:12px;}
+  @media(max-width:400px){
+    .form-nav{flex-wrap:wrap;}
+    .form-nav button{flex:1; min-width:120px;}
+  }
+  .step-panel{display:none;}
+  .step-panel.active{display:block; animation:fadeSlide .4s ease;}
+  @keyframes fadeSlide{from{opacity:0; transform:translateX(12px);} to{opacity:1; transform:translateX(0);}}
+  .success-panel{display:none; text-align:center; padding:20px 0;}
+  .success-panel.active{display:block; animation:fadeSlide .4s ease;}
+  .check-circle{
+    width:70px; height:70px; border-radius:50%; background:rgba(76,175,125,0.15);
+    border:2px solid var(--emerald-500); color:var(--emerald-500); font-size:32px;
+    display:flex; align-items:center; justify-content:center; margin:0 auto 24px;
+  }
+
+  /* Testimonials */
+  .testimonial-track{display:flex; gap:24px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:12px;}
+  .testimonial-track::-webkit-scrollbar{height:5px;}
+  .testimonial-track::-webkit-scrollbar-thumb{background:var(--gold-500); border-radius:3px;}
+  .testimonial-card{
+    scroll-snap-align:start; min-width:320px; background:var(--charcoal-800); border-radius:14px;
+    padding:32px; border:1px solid rgba(201,162,75,0.15);
+  }
+  @media(max-width:400px){
+    .testimonial-card{min-width:82vw; padding:24px;}
+  }
+  .quote-mark{font-family:'Sora',sans-serif; font-size:40px; color:var(--gold-500); line-height:1; margin-bottom:14px;}
+  .stars{color:var(--gold-500); margin-bottom:14px; letter-spacing:2px;}
+  .testimonial-card p.quote{font-size:14.5px; color:var(--offwhite-100); line-height:1.7; margin-bottom:20px;}
+  .testimonial-author{font-size:13px; color:var(--stone-400);}
+  .testimonial-author b{color:var(--gold-300);}
+
+  /* Contact */
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  @media(max-width:800px){.contact-grid{grid-template-columns:1fr;}}
+  .map-frame{border-radius:14px; overflow:hidden; border:1px solid rgba(201,162,75,0.25); min-height:340px;}
+  .map-frame iframe{width:100%; height:100%; min-height:280px;}
+  @media(max-width:480px){
+    .contact-card{padding:14px 16px; gap:12px;}
+    .contact-card .value{font-size:13.5px;}
+  }
+  .contact-cards{display:flex; flex-direction:column; gap:16px;}
+  .contact-card{
+    display:flex; gap:16px; align-items:center; background:var(--charcoal-800);
+    border:1px solid rgba(201,162,75,0.15); border-radius:12px; padding:18px 20px;
+    transition:border-color .25s ease, transform .25s ease;
+  }
+  .contact-card:hover{border-color:var(--gold-500); transform:translateX(4px);}
+  .contact-icon{
+    width:44px; height:44px; border-radius:10px; background:rgba(201,162,75,0.12);
+    display:flex; align-items:center; justify-content:center; color:var(--gold-500); font-size:19px; flex-shrink:0;
+  }
+  .contact-card .label{font-size:12px; color:var(--stone-400); text-transform:uppercase; letter-spacing:1px;}
+  .contact-card .value{font-size:15px; font-weight:600;}
+
+  /* Footer */
+  footer{background:var(--charcoal-900); border-top:1px solid rgba(201,162,75,0.15); padding:60px 0 24px;}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:40px;}
+  @media(max-width:800px){.footer-grid{grid-template-columns:1fr 1fr; gap:30px;}}
+  @media(max-width:480px){
+    .footer-grid{grid-template-columns:1fr; gap:28px;}
+    .footer-bottom{flex-direction:column; align-items:flex-start;}
+  }
+  .footer-col h5{font-size:13px; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold-300); margin-bottom:18px;}
+  .footer-col a{display:block; font-size:14px; color:var(--stone-400); margin-bottom:10px; transition:color .2s ease;}
+  .footer-col a:hover{color:var(--gold-500);}
+  .footer-bottom{
+    border-top:1px solid rgba(201,162,75,0.1); padding-top:24px; display:flex;
+    justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12.5px; color:var(--stone-400);
+  }
+  .social-icons{display:flex; gap:12px;}
+
+  /* Sticky WhatsApp */
+  .whatsapp-fab{
+    position:fixed; bottom:26px; right:26px; width:60px; height:60px; border-radius:50%;
+    background:linear-gradient(120deg, var(--gold-500), var(--amber-500)); z-index:90;
+    display:flex; align-items:center; justify-content:center; font-size:28px; color:var(--charcoal-950);
+    box-shadow:0 8px 24px rgba(0,0,0,0.4); cursor:pointer;
+  }
+  @media(max-width:480px){
+    .whatsapp-fab{width:50px; height:50px; font-size:22px; bottom:18px; right:18px;}
+  }
+  .whatsapp-fab::before{
+    content:''; position:absolute; inset:-6px; border-radius:50%; border:2px solid var(--gold-500);
+    animation:pulseRing 2.2s ease-out infinite;
+  }
+  @keyframes pulseRing{
+    0%{transform:scale(0.9); opacity:0.9;}
+    100%{transform:scale(1.5); opacity:0;}
+  }
+
+  /* Scroll reveal */
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.visible{opacity:1; transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+    .whatsapp-fab::before{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="logo-mark">
+    <div>
+      <div class="np">NP <span>BRICKS BUILDCON</span></div>
+      <div class="logo-sub">Plan · Design · Build · Inspire</div>
+    </div>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#home" onclick="closeNav()">Home</a>
+    <a href="#about" onclick="closeNav()">About</a>
+    <a href="#services" onclick="closeNav()">Services</a>
+    <a href="#portfolio" onclick="closeNav()">Portfolio</a>
+    <a href="#quote" onclick="closeNav()">Get a Quote</a>
+    <a href="#contact" onclick="closeNav()">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <a class="icon-btn" href="https://wa.me/916306395347" target="_blank" title="WhatsApp">💬</a>
+    <a class="icon-btn" href="tel:+916306395347" title="Call">📞</a>
+    <button class="nav-toggle" onclick="toggleNav()">☰</button>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="container hero-inner">
+    <div class="eyebrow">Architecture · Interiors · Construction · Varanasi</div>
+    <h1>
+      <span class="script-line script">We Build Your Dream</span>
+      Plan. Design. Build. Inspire.
+    </h1>
+    <p class="sub">From the first sketch of a floor plan to the final coat of paint, NP Bricks Buildcon carries your project end-to-end — architectural planning, interior and exterior design, and full construction execution, all under one roof in Varanasi.</p>
+    <div class="hero-ctas">
+      <a href="#quote" class="btn-primary">Get a Free Consultation</a>
+      <a href="#portfolio" class="btn-secondary">View Our Work</a>
+    </div>
+    <div class="trust-strip">
+      <div class="trust-strip-row"><span>500+</span> Plans Delivered</div>
+      <div class="dot"></div>
+      <div class="trust-strip-row"><span>10+</span> Years Experience</div>
+      <div class="dot"></div>
+      <div class="trust-strip-row">Varanasi Based</div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container about-grid reveal">
+    <div class="founder-frame">
+      <img src="founder.jpg" alt="Kartik Vishwakarma, Founder">
+    </div>
+    <div class="about-copy">
+      <div class="eyebrow">The Founder</div>
+      <h3>Kartik Vishwakarma</h3>
+      <p>Founder &amp; Director of NP Bricks Buildcon, Kartik built the studio on a simple belief — that good construction starts with good planning, not the other way round. Every project moves through the same disciplined process: understand the site, design with intent, then build without compromise.</p>
+      <p>Based out of Lahartara, Varanasi, his team has taken projects from a blank plot to a finished home or commercial space, handling architecture, interiors, exteriors and site execution as one continuous service rather than handoffs between contractors.</p>
+      <div class="credentials">
+        <div class="credential"><div class="num">10+</div><div class="label">Years in the field</div></div>
+        <div class="credential"><div class="num">500+</div><div class="label">Plans delivered</div></div>
+        <div class="credential"><div class="num">4</div><div class="label">Services, one team</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">What We Do</div>
+      <h2>Four services. One accountable team.</h2>
+      <p>Every stage of your build, handled in-house — so nothing gets lost between the architect, the designer, and the contractor.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">📐</div>
+        <h4>Architectural Planning</h4>
+        <p>Structural drawings, floor plans, and elevation designs engineered for your plot and your budget.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🛋️</div>
+        <h4>Interior Design</h4>
+        <p>Space planning, material selection, and 3D visualization so you see the room before it's built.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🏢</div>
+        <h4>Exterior Design</h4>
+        <p>Facade styling and landscaping integration that gives your building real street presence.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🏗️</div>
+        <h4>Construction Solutions</h4>
+        <p>End-to-end execution and on-site project management from foundation to handover.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">How It Works</div>
+      <h2>A four-step path from idea to keys-in-hand.</h2>
+    </div>
+    <div class="timeline reveal">
+      <div class="timeline-step"><div class="timeline-dot">1</div><h4>Consult</h4><p>We visit your site and understand your needs and budget.</p></div>
+      <div class="timeline-step"><div class="timeline-dot">2</div><h4>Design</h4><p>Plans, elevations, and interiors are drafted and refined with you.</p></div>
+      <div class="timeline-step"><div class="timeline-dot">3</div><h4>Approve</h4><p>Sign off on the final design, timeline, and cost estimate.</p></div>
+      <div class="timeline-step"><div class="timeline-dot">4</div><h4>Build</h4><p>Our team executes on-site with regular progress updates.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="portfolio">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Our Work</div>
+      <h2>A few projects we've delivered.</h2>
+    </div>
+    <div class="filter-tabs reveal">
+      <div class="filter-tab active" onclick="filterGallery('all', this)">All</div>
+      <div class="filter-tab" onclick="filterGallery('residential', this)">Residential</div>
+      <div class="filter-tab" onclick="filterGallery('commercial', this)">Commercial</div>
+      <div class="filter-tab" onclick="filterGallery('interiors', this)">Interiors</div>
+    </div>
+    <div class="gallery-grid reveal" id="galleryGrid">
+      <div class="gallery-item" data-cat="residential"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80"><div class="gallery-tag">Residential</div></div>
+      <div class="gallery-item" data-cat="interiors"><img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=500&q=80"><div class="gallery-tag">Interiors</div></div>
+      <div class="gallery-item" data-cat="commercial"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=500&q=80"><div class="gallery-tag">Commercial</div></div>
+      <div class="gallery-item" data-cat="residential"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80"><div class="gallery-tag">Residential</div></div>
+      <div class="gallery-item" data-cat="interiors"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=500&q=80"><div class="gallery-tag">Interiors</div></div>
+      <div class="gallery-item" data-cat="commercial"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80"><div class="gallery-tag">Commercial</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="quote">
+  <div class="container">
+    <div class="section-head reveal" style="margin:0 auto 48px; text-align:center;">
+      <div class="eyebrow" style="justify-content:center;">Plan Your Project</div>
+      <h2>Tell us about your project.</h2>
+      <p style="margin:0 auto;">Three quick steps — our team will reach out within 24 hours with a free consultation.</p>
+    </div>
+
+    <div class="form-panel reveal">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+      <form id="quoteForm">
+        <div class="step-panel active" data-step="1">
+          <div class="step-label">Step 1 of 3</div>
+          <div class="step-title">Basic Information</div>
+          <div class="form-group"><label>Full Name</label><input type="text" required placeholder="Your full name"></div>
+          <div class="form-group"><label>Phone Number</label><input type="tel" required placeholder="+91 00000 00000">
+            <div class="checkbox-row"><input type="checkbox" id="wa-check"><label for="wa-check" style="margin:0;">This number is on WhatsApp</label></div>
+          </div>
+          <div class="form-group"><label>Email (optional)</label><input type="email" placeholder="you@example.com"></div>
+          <div class="form-group"><label>City / Location</label><input type="text" required placeholder="Varanasi"></div>
+        </div>
+
+        <div class="step-panel" data-step="2">
+          <div class="step-label">Step 2 of 3</div>
+          <div class="step-title">Project Details</div>
+          <div class="form-group"><label>Service Needed</label>
+            <select required>
+              <option value="">Select a service</option>
+              <option>Architectural Planning</option>
+              <option>Interior Design</option>
+              <option>Exterior Design</option>
+              <option>Full Construction</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Plot Size (sq. ft.)</label><input type="number" required placeholder="e.g. 1200"></div>
+          <div class="form-group"><label>Number of Floors</label>
+            <select required>
+              <option value="">Select floors</option>
+              <option>1–2</option>
+              <option>3–4</option>
+              <option>5+</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Estimated Budget Range (optional)</label>
+            <select>
+              <option value="">Select a range</option>
+              <option>Under ₹10 Lakh</option>
+              <option>₹10–25 Lakh</option>
+              <option>₹25–50 Lakh</option>
+              <option>₹50 Lakh+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="step-panel" data-step="3">
+          <div class="step-label">Step 3 of 3</div>
+          <div class="step-title">Custom Requirements</div>
+          <div class="form-group"><label>Project Description (optional)</label><textarea rows="4" placeholder="Tell us more about what you're envisioning..."></textarea></div>
+          <div class="form-group"><label>Preferred Contact Time (optional)</label>
+            <select>
+              <option value="">No preference</option>
+              <option>Morning</option>
+              <option>Afternoon</option>
+              <option>Evening</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Upload Reference Image / Plot Layout (optional)</label><input type="file"></div>
+        </div>
+
+        <div class="success-panel" id="successPanel">
+          <div class="check-circle">✓</div>
+          <h3 style="margin-bottom:10px;">Thank you!</h3>
+          <p style="color:var(--stone-400);">Our team will contact you within 24 hours. You can also reach us instantly on WhatsApp.</p>
+          <a href="https://wa.me/916306395347" target="_blank" class="btn-primary" style="margin-top:24px;">Chat With Us Instantly</a>
+        </div>
+
+        <div class="form-nav" id="formNav">
+          <button type="button" class="btn-secondary" id="backBtn" onclick="changeStep(-1)" style="visibility:hidden;">Back</button>
+          <button type="button" class="btn-primary" id="nextBtn" onclick="changeStep(1)">Continue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Client Feedback</div>
+      <h2>What people say after building with us.</h2>
+    </div>
+    <div class="testimonial-track reveal">
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <div class="stars">★★★★★</div>
+        <p class="quote">Kartik's team planned and built our home in Lahartara without a single missed deadline. The interior visualization before construction saved us from a lot of costly changes later.</p>
+        <div class="testimonial-author"><b>Rohit Singh</b> — Residential Client, Varanasi</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <div class="stars">★★★★★</div>
+        <p class="quote">We hired NP Bricks for our showroom's exterior and interior together. Having one team responsible for both made the whole process far less stressful.</p>
+        <div class="testimonial-author"><b>Anjali Verma</b> — Commercial Client</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <div class="stars">★★★★★</div>
+        <p class="quote">Transparent costing, regular site updates, and a design sense that actually matched what we asked for. Would recommend to anyone building in Varanasi.</p>
+        <div class="testimonial-author"><b>Deepak Rai</b> — Residential Client</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Get In Touch</div>
+      <h2>Visit us or reach out directly.</h2>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="map-frame">
+        <iframe src="https://www.google.com/maps?q=Lahartara+Chauraha+Varanasi&output=embed" width="100%" height="340" style="border:0;" loading="lazy"></iframe>
+      </div>
+      <div class="contact-cards">
+        <a class="contact-card" href="tel:+916306395347">
+          <div class="contact-icon">📞</div>
+          <div><div class="label">Phone / WhatsApp</div><div class="value">+91 63063 95347</div></div>
+        </a>
+        <a class="contact-card" href="mailto:abhivashu831@gmail.com">
+          <div class="contact-icon">✉️</div>
+          <div><div class="label">Email</div><div class="value">abhivashu831@gmail.com</div></div>
+        </a>
+        <a class="contact-card" href="https://www.google.com/maps?q=Lahartara+Chauraha+Varanasi" target="_blank">
+          <div class="contact-icon">📍</div>
+          <div><div class="label">Address</div><div class="value">Lahartara Chauraha, Near Police Chowki, Varanasi, UP</div></div>
+        </a>
+        <a class="contact-card" href="https://wa.me/916306395347" target="_blank">
+          <div class="contact-icon">💬</div>
+          <div><div class="label">Instant Chat</div><div class="value">Chat With Us on WhatsApp</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="np" style="font-size:20px; margin-bottom:8px;">NP <span style="color:var(--gold-500)">BRICKS BUILDCON</span></div>
+        <p class="script" style="font-size:18px; margin-bottom:14px;">We Build Your Dream</p>
+        <p style="font-size:13px; color:var(--stone-400); line-height:1.6;">Architecture, interiors, exteriors and construction — planned and delivered as one continuous service.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#quote">Get a Quote</a>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <a href="#services">Architectural Planning</a>
+        <a href="#services">Interior Design</a>
+        <a href="#services">Exterior Design</a>
+        <a href="#services">Construction Solutions</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="tel:+916306395347">+91 63063 95347</a>
+        <a href="mailto:abhivashu831@gmail.com">abhivashu831@gmail.com</a>
+        <a href="https://wa.me/916306395347" target="_blank">Chat on WhatsApp</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 NP Bricks Buildcon. All rights reserved.</div>
+      <div class="social-icons">
+        <span class="icon-btn" style="width:32px;height:32px;font-size:13px;">f</span>
+        <span class="icon-btn" style="width:32px;height:32px;font-size:13px;">in</span>
+        <span class="icon-btn" style="width:32px;height:32px;font-size:13px;">ig</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a class="whatsapp-fab" href="https://wa.me/916306395347" target="_blank" title="Chat on WhatsApp">💬</a>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
+  function closeNav(){ document.getElementById('navLinks').classList.remove('open'); }
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Gallery filter
+  function filterGallery(cat, btn){
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.style.display = (cat === 'all' || item.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+
+  // Multi-step form
+  let currentStep = 1;
+  const totalSteps = 3;
+  function updateForm(){
+    document.querySelectorAll('.step-panel').forEach(p => {
+      p.classList.toggle('active', parseInt(p.dataset.step) === currentStep);
+    });
+    document.getElementById('progressFill').style.width = (currentStep/totalSteps*100) + '%';
+    document.getElementById('backBtn').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+    document.getElementById('nextBtn').textContent = currentStep === totalSteps ? 'Get My Free Consultation' : 'Continue';
+  }
+  function changeStep(dir){
+    const panel = document.querySelector(`.step-panel[data-step="${currentStep}"]`);
+    const inputs = panel.querySelectorAll('input[required], select[required]');
+    if(dir === 1){
+      for(const inp of inputs){ if(!inp.value){ inp.focus(); inp.style.borderColor = '#E08A2C'; return; } }
+    }
+    if(currentStep === totalSteps && dir === 1){
+      document.getElementById('quoteForm').querySelectorAll('.step-panel, .form-nav').forEach(el => el.style.display = 'none');
+      document.getElementById('successPanel').classList.add('active');
+      document.getElementById('progressFill').style.width = '100%';
+      return;
+    }
+    currentStep = Math.min(totalSteps, Math.max(1, currentStep + dir));
+    updateForm();
+  }
+  document.getElementById('quoteForm').addEventListener('submit', e => e.preventDefault());
+  updateForm();
+</script>
+</body>
+</html>
